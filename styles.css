@@ -469,101 +469,103 @@ header{background:color-mix(in srgb, var(--surface-strong) 92%, transparent)!imp
 
 
 
+
 /* ==========================================================
-   v8 — APPLE (iOS 26 / Liquid Glass)
-   Контент — на щільних grouped-поверхнях; прозорий «рідкий
-   метал-скло» лише у плаваючих контролах (шапка, таб-бар,
-   фільтри, оверлеї карти). Системні кольори та шрифт SF Pro,
-   концентричні радіуси, капсульні кнопки, bottom-sheet.
+   v9 — APPLE MUSIC (iOS 27)
+   Червоний акцент за замовчуванням (#FA233B), чорна «сцена» /
+   білий «лист», великі жирні заголовки, картки-«обложки» з
+   кольоровим сяйвом статусу (як динамічний колір Now Playing),
+   скляний таб-бар, листи знизу. Статус «гаряча» — помаранчева,
+   щоб не зливалась з акцентом.
    ========================================================== */
 html:not(.dark){
-  --bg:#F2F2F7;--surface:#fff;--surface-strong:#fff;--surface-2:rgba(120,120,128,.12);
-  --border:rgba(60,60,67,.12);--border-strong:rgba(60,60,67,.29);
-  --text-1:#000;--text-2:rgba(60,60,67,.6);
-  --blue:#007AFF;--blue-2:#0062CC;--blue-ink:#007AFF;--accent:#007AFF;--accent-2:#007AFF;
-  --gold:#34C759;--gold-ink:#248A3D;--rose:#FF3B30;--rose-ink:#D70015;--emerald:#8E8E93;--emerald-ink:#636366;
-  --glass:rgba(255,255,255,.62);--glass-edge:inset 0 0 0 .5px rgba(255,255,255,.6),inset 0 1px 0 rgba(255,255,255,.8);
-  --lift:0 .5px 1px rgba(0,0,0,.04),0 8px 24px -12px rgba(0,0,0,.12);--shadow-ambient:var(--lift);--glow:none;--grad-1:transparent;--grad-2:transparent}
+  --bg:#fff;--surface:#F5F5F7;--surface-strong:#F5F5F7;--surface-2:rgba(120,120,128,.14);
+  --border:rgba(60,60,67,.12);--border-strong:rgba(60,60,67,.3);
+  --text-1:#000;--text-2:rgba(60,60,67,.62);
+  --blue:#FA233B;--blue-2:#D91A31;--blue-ink:#E0152D;--accent:#FA233B;--accent-2:#E0152D;
+  --gold:#2DB84D;--gold-ink:#1F8A39;--rose:#FF9500;--rose-ink:#C45F00;--emerald:#8E8E93;--emerald-ink:#636366;
+  --glass:rgba(255,255,255,.66);--glass-edge:inset 0 0 0 .5px rgba(255,255,255,.7),inset 0 1px 0 rgba(255,255,255,.9);
+  --lift:none;--shadow-ambient:none;--glow:none;--grad-1:transparent;--grad-2:transparent}
 .dark{
-  --bg:#000;--surface:#1C1C1E;--surface-strong:#1C1C1E;--surface-2:rgba(120,120,128,.24);
-  --border:rgba(84,84,88,.45);--border-strong:rgba(84,84,88,.8);
-  --text-1:#fff;--text-2:rgba(235,235,245,.6);
-  --blue:#0A84FF;--blue-2:#409CFF;--blue-ink:#409CFF;--accent:#0A84FF;--accent-2:#409CFF;
-  --gold:#30D158;--gold-ink:#30D158;--rose:#FF453A;--rose-ink:#FF6961;--emerald:#8E8E93;--emerald-ink:#98989D;
-  --glass:rgba(44,44,46,.58);--glass-edge:inset 0 0 0 .5px rgba(255,255,255,.16),inset 0 1px 0 rgba(255,255,255,.2);
+  --bg:#000;--surface:#1C1C1E;--surface-strong:#1C1C1E;--surface-2:rgba(120,120,128,.26);
+  --border:rgba(84,84,88,.4);--border-strong:rgba(84,84,88,.8);
+  --text-1:#fff;--text-2:rgba(235,235,245,.62);
+  --blue:#FC3C54;--blue-2:#FF5D70;--blue-ink:#FF5A6E;--accent:#FC3C54;--accent-2:#FF5A6E;
+  --gold:#30D158;--gold-ink:#4CE070;--rose:#FF9F0A;--rose-ink:#FFB340;--emerald:#8E8E93;--emerald-ink:#98989D;
+  --glass:rgba(40,40,42,.6);--glass-edge:inset 0 0 0 .5px rgba(255,255,255,.16),inset 0 1px 0 rgba(255,255,255,.22);
   --lift:none;--shadow-ambient:none;--glow:none;--grad-1:transparent;--grad-2:transparent}
 
-body,button,input,select,textarea{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",system-ui,"Segoe UI",Roboto,sans-serif!important;letter-spacing:-.011em;font-variant-numeric:tabular-nums}
+body,button,input,select,textarea{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",system-ui,"Segoe UI",Roboto,sans-serif!important;letter-spacing:-.012em;font-variant-numeric:tabular-nums}
 body::before,.dark body::before{display:none}
 .text-\[10px\],.text-\[11px\]{font-weight:500;letter-spacing:0}
 button{transition:transform .35s cubic-bezier(.32,.72,0,1),background-color .2s,opacity .2s}
-button:active{transform:scale(.97)}
-
-/* Радіуси — концентричні: картка 26 → внутрішні 18 → дрібні 12 */
-.rounded-3xl{border-radius:26px!important}.rounded-2xl{border-radius:18px!important}.rounded-xl{border-radius:12px!important}.rounded-lg{border-radius:9px!important}
+button:active{transform:scale(.96)}
+.rounded-3xl{border-radius:22px!important}.rounded-2xl{border-radius:14px!important}.rounded-xl{border-radius:10px!important}.rounded-lg{border-radius:8px!important}
 .shadow-lg,.shadow-md,.shadow-sm,.shadow-xl,.shadow-2xl,.shadow-blue-brand{box-shadow:none!important}
 .inner-cell{background:var(--surface-2)!important;border:0!important}
 .apple-glass{background:var(--surface)!important;border:0!important;backdrop-filter:none!important}
 
-/* Liquid Glass: шапка */
-header{background:var(--glass)!important;backdrop-filter:blur(28px) saturate(190%);-webkit-backdrop-filter:blur(28px) saturate(190%);border-bottom:.5px solid var(--border)!important}
-header h1{font-weight:600;letter-spacing:-.022em}
+/* Шапка: великий жирний заголовок, як «Слухати» в Apple Music */
+header{background:var(--glass)!important;backdrop-filter:blur(30px) saturate(190%);-webkit-backdrop-filter:blur(30px) saturate(190%);border-bottom:.5px solid var(--border)!important}
+header h1{font-size:19px!important;line-height:1.1!important;font-weight:800!important;letter-spacing:-.035em!important;white-space:normal!important;overflow:visible!important}
+@media(min-width:640px){header h1{font-size:24px!important}}
+header h1 span{color:var(--blue)!important}
 .from-blue-brand,.bg-blue-btn,.btn-gradient-apple,.active-pill-glow{background:var(--blue)!important;background-image:none!important;color:#fff!important;border:0!important}
 .bg-blue-btn:hover,.btn-gradient-apple:hover{background:var(--blue-2)!important;transform:none;box-shadow:none}
 .from-blue-brand svg,.btn-gradient-apple svg,.bg-blue-btn svg{color:#fff}
 .from-blue-brand{border-radius:10px!important}
-.btn-gradient-apple,.bg-blue-btn{font-weight:600}
+.btn-gradient-apple,.bg-blue-btn{font-weight:700}
 #themeBtn,#adminToggleBtn,#dataSourceBadge{background:var(--surface-2)!important;border:0!important;border-radius:999px!important}
+#addBtn{border-radius:999px!important}
 
-/* Пошук — капсульне iOS-поле */
-#searchInput{background:var(--surface-2)!important;border:0!important;border-radius:999px!important;padding-top:13px!important;padding-bottom:13px!important;font-size:16px!important;box-shadow:none!important}
-#searchInput:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 35%,transparent)!important}
-/* Фільтри — капсули; активний — синій tint */
-.chip-btn{border-radius:999px!important;background:var(--surface)!important;border:0!important;color:var(--text-1)!important;font-weight:500!important;font-size:13px!important;box-shadow:var(--lift)}
-.dark .chip-btn{background:var(--surface-2)!important}
-.chip-active,.dark .chip-active{background:var(--blue)!important;color:#fff!important;box-shadow:none!important}
+/* Пошук і фільтри */
+#searchInput{background:var(--surface-2)!important;border:0!important;border-radius:12px!important;padding-top:13px!important;padding-bottom:13px!important;font-size:16px!important;box-shadow:none!important}
+#searchInput:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 30%,transparent)!important}
+.chip-btn,.dark .chip-btn{border-radius:999px!important;background:var(--surface-2)!important;border:0!important;color:var(--text-1)!important;font-weight:600!important;font-size:13px!important;box-shadow:none}
+.chip-active,.dark .chip-active{background:var(--blue)!important;color:#fff!important}
 
-/* Картка — grouped-поверхня, без рамок */
-.shipment-card,.dark .shipment-card{border-radius:26px!important;padding:18px!important;background:var(--surface)!important;border:0!important;box-shadow:var(--lift)!important;transition:transform .45s cubic-bezier(.32,.72,0,1)}
-@media (hover:hover){.shipment-card:hover{transform:scale(1.008)}}
-.shipment-card.card-confirmed{opacity:.62}
-/* Статус — тонована капсула (як у системних бейджах) */
-.badge-hot,.badge-searching,.badge-confirmed{border-radius:999px!important;border:0!important;font-size:12px!important;font-weight:600!important;letter-spacing:0}
-.badge-searching{background:color-mix(in srgb,var(--gold) 16%,transparent)!important}
-.badge-hot{background:color-mix(in srgb,var(--rose) 14%,transparent)!important}
-.badge-confirmed{background:var(--surface-2)!important}
-/* Маршрут — як великий заголовок iOS */
-.shipment-card .text-\[15px\]{font-size:20px!important;line-height:1.15!important;font-weight:600!important;letter-spacing:-.025em!important}
-.shipment-card .route-line{width:2px!important;opacity:.4!important}
-/* Карта + скляні оверлеї */
-.route-preview{height:156px;border-radius:18px;border:0;box-shadow:none}
+/* Картка = «обкладинка»: колір статусу світиться зверху, як динамічний колір Now Playing */
+.shipment-card,.dark .shipment-card{border-radius:22px!important;padding:18px!important;border:0!important;box-shadow:none!important;transition:transform .45s cubic-bezier(.32,.72,0,1);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--gold) 20%,var(--surface)) 0%,var(--surface) 46%)!important}
+.shipment-card.card-hot{background:linear-gradient(180deg,color-mix(in srgb,var(--rose) 26%,var(--surface)) 0%,var(--surface) 50%)!important}
+.shipment-card.card-confirmed{background:var(--surface)!important;opacity:.6}
+@media (hover:hover){.shipment-card:hover{transform:scale(1.01)}.shipment-card.card-confirmed:hover{opacity:1}}
+.badge-hot,.badge-searching,.badge-confirmed{border-radius:999px!important;border:0!important;font-size:12px!important;font-weight:700!important;letter-spacing:0;background:color-mix(in srgb,var(--text-1) 9%,transparent)!important}
+.badge-searching{background:color-mix(in srgb,var(--gold) 20%,transparent)!important}
+.badge-hot{background:color-mix(in srgb,var(--rose) 22%,transparent)!important}
+/* Маршрут — як назва альбому */
+.shipment-card .text-\[15px\]{font-size:22px!important;line-height:1.1!important;font-weight:800!important;letter-spacing:-.035em!important}
+.shipment-card .route-line{width:2px!important;opacity:.45!important}
+/* Карта — «арт» обкладинки */
+.route-preview{height:160px;border-radius:14px;border:0;box-shadow:none}
 html:not(.dark) .route-preview iframe{filter:saturate(.8)}
 .dark .route-preview iframe{filter:invert(92%) hue-rotate(190deg) saturate(.55) brightness(.9) contrast(.9)}
-.route-pin{width:26px;height:26px;border-radius:50%;transform:none;background:var(--rose);color:#fff;border:3px solid #fff}.route-pin span{transform:none}
-.route-pin-b{background:var(--blue)}
+.route-pin{width:26px;height:26px;border-radius:50%;transform:none;background:var(--text-1);color:var(--bg);border:3px solid var(--surface)}.route-pin span{transform:none}
+.route-pin-b{background:var(--blue);color:#fff}
 .route-label,.route-distance,.route-expand{border-radius:999px;background:var(--glass);color:var(--text-1);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);box-shadow:var(--glass-edge);border:0}
 .route-expand{border-radius:50%}
-.route-info{border-radius:14px!important;background:transparent!important;padding-left:2px!important}
+.route-info{border-radius:12px!important;background:transparent!important;padding-left:2px!important}
+.route-info button,.dark .route-info button{color:var(--blue-ink)!important}
 .ticket-foot{margin:0!important;padding:0!important;border:0!important}
 .ticket-foot::before,.ticket-foot::after{display:none!important}
-.ticket-foot .btn-gradient-apple{border-radius:999px;padding-top:15px;padding-bottom:15px;font-size:15px}
-.detail-icon,.dark .detail-icon{background:color-mix(in srgb,var(--blue) 14%,transparent)!important;color:var(--blue-ink)!important;border-radius:9px!important}
+.ticket-foot .btn-gradient-apple{border-radius:12px;padding-top:14px;padding-bottom:14px;font-size:15px}
+.detail-icon,.dark .detail-icon{background:color-mix(in srgb,var(--blue) 14%,transparent)!important;color:var(--blue-ink)!important;border-radius:8px!important}
 .detail-icon-plain,.dark .detail-icon-plain,.text-blue-brand,.dark .text-blue-brand{color:var(--blue-ink)!important}
 .bg-blue-soft{background:color-mix(in srgb,var(--blue) 15%,transparent)!important;color:var(--blue-ink)!important}
 
-/* Liquid Glass: плаваючий таб-бар */
-nav.fixed{left:14px!important;right:14px!important;bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;border-radius:34px;background:var(--glass)!important;backdrop-filter:blur(28px) saturate(190%);-webkit-backdrop-filter:blur(28px) saturate(190%);border:0!important;box-shadow:var(--glass-edge),0 12px 40px -8px rgba(0,0,0,.25);padding-bottom:.5rem!important}
-nav .btn-gradient-apple{border-radius:50%!important;--tw-ring-color:transparent!important;box-shadow:0 6px 16px -4px color-mix(in srgb,var(--blue) 60%,transparent)!important}
+/* Скляний таб-бар (Apple Music tab bar) */
+nav.fixed{left:12px!important;right:12px!important;bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;border-radius:32px;background:var(--glass)!important;backdrop-filter:blur(30px) saturate(190%);-webkit-backdrop-filter:blur(30px) saturate(190%);border:0!important;box-shadow:var(--glass-edge),0 12px 40px -8px rgba(0,0,0,.3);padding-bottom:.5rem!important}
+nav .btn-gradient-apple{border-radius:50%!important;box-shadow:0 6px 18px -4px color-mix(in srgb,var(--blue) 65%,transparent)!important}
 
-/* Модалки: центрований скляний діалог на десктопі, bottom-sheet на телефоні */
-.fixed.inset-0{background:rgba(0,0,0,.38)!important;backdrop-filter:blur(6px)}
-.fixed.inset-0>.apple-glass{position:relative;border-radius:30px!important;box-shadow:0 30px 80px -20px rgba(0,0,0,.45)!important}
+/* Модалки: діалог на десктопі, лист знизу на телефоні */
+.fixed.inset-0{background:rgba(0,0,0,.4)!important;backdrop-filter:blur(8px)}
+.fixed.inset-0>.apple-glass{position:relative;border-radius:28px!important;box-shadow:0 30px 80px -20px rgba(0,0,0,.5)!important}
 @media(max-width:640px){
   .fixed.inset-0{align-items:flex-end!important;padding:0!important}
-  .fixed.inset-0>.apple-glass{max-width:none!important;border-radius:30px 30px 0 0!important;padding-top:26px!important;padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))!important}
+  .fixed.inset-0>.apple-glass{max-width:none!important;border-radius:28px 28px 0 0!important;padding-top:26px!important;padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))!important}
   .fixed.inset-0>.apple-glass::before{content:"";position:absolute;top:8px;left:50%;width:36px;height:5px;margin-left:-18px;border-radius:3px;background:var(--border-strong)}
 }
 #appleToast{background:var(--glass)!important;backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:0!important;border-radius:999px!important;box-shadow:var(--glass-edge),0 10px 30px -8px rgba(0,0,0,.3)!important}
-.inner-cell.focus-blue,input.inner-cell,select.inner-cell,textarea.inner-cell{font-size:16px}
-.focus-blue:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 35%,transparent)}
-.selection-blue ::selection,.selection-blue::selection{background:color-mix(in srgb,var(--blue) 35%,transparent)!important;color:inherit!important}
+input.inner-cell,select.inner-cell,textarea.inner-cell{font-size:16px}
+.focus-blue:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 30%,transparent)}
+.selection-blue ::selection,.selection-blue::selection{background:color-mix(in srgb,var(--blue) 30%,transparent)!important;color:inherit!important}

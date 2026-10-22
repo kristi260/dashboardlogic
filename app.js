@@ -337,14 +337,14 @@
       // Стікер малюється в тій темі (світла/темна), в якій зараз працює користувач.
       const isDark = document.documentElement.classList.contains('dark');
       const palette = isDark ? {
-        gradFrom: '#1C1C1E', gradTo: '#000000', panelFill: 'rgba(255,255,255,0.05)', panelStroke: '#0A84FF',
-        badgeFill: '#0A84FF', badgeText: '#ffffff', priceText: '#409CFF', labelText: '#98989D', valueText: '#FFFFFF',
-        unloadingText: '#30D158', divider: 'rgba(255,255,255,0.14)', dateText: '#409CFF', footerFill: '#0A84FF',
+        gradFrom: '#3A0A12', gradTo: '#000000', panelFill: 'rgba(255,255,255,0.05)', panelStroke: '#FC3C54',
+        badgeFill: '#FC3C54', badgeText: '#ffffff', priceText: '#FF5A6E', labelText: '#98989D', valueText: '#FFFFFF',
+        unloadingText: '#30D158', divider: 'rgba(255,255,255,0.14)', dateText: '#FF5A6E', footerFill: '#FC3C54',
         footerText: '#ffffff', canvasBg: '#000000'
       } : {
-        gradFrom: '#FFFFFF', gradTo: '#F2F2F7', panelFill: 'rgba(120,120,128,0.06)', panelStroke: '#007AFF',
-        badgeFill: '#007AFF', badgeText: '#ffffff', priceText: '#007AFF', labelText: '#6C6C70', valueText: '#000000',
-        unloadingText: '#248A3D', divider: 'rgba(60,60,67,0.18)', dateText: '#007AFF', footerFill: '#007AFF',
+        gradFrom: '#FFE3E6', gradTo: '#FFFFFF', panelFill: 'rgba(120,120,128,0.06)', panelStroke: '#FA233B',
+        badgeFill: '#FA233B', badgeText: '#ffffff', priceText: '#E0152D', labelText: '#6C6C70', valueText: '#000000',
+        unloadingText: '#1F8A39', divider: 'rgba(60,60,67,0.18)', dateText: '#E0152D', footerFill: '#FA233B',
         footerText: '#ffffff', canvasBg: '#FFFFFF'
       };
 
@@ -492,7 +492,7 @@
         document.getElementById('themeColorMeta').setAttribute('content', '#000000');
       } else {
         document.documentElement.classList.remove('dark');
-        document.getElementById('themeColorMeta').setAttribute('content', '#F2F2F7');
+        document.getElementById('themeColorMeta').setAttribute('content', '#FFFFFF');
       }
       localStorage.setItem('logix_theme', theme);
     }
