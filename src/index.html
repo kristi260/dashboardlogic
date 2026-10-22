@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="uk" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Актуальні заявки та фрахт для перевізників 2026-2027</title>
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="LogiHub">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0E0E0C" id="themeColorMeta">
+
+  <!--
+    Installing this page to the home screen (Android "Встановити
+    застосунок" / iOS "На екран Домой") launches it in standalone mode:
+    no address bar, no browser chrome, just the app full-screen - exactly
+    like a native app icon. This only takes effect for the installed/
+    home-screen launch; a page opened in an ordinary browser tab will
+    always keep some browser UI, since no website can hide that on its
+    own for security reasons.
+  -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+
+  <!--
+    Theme is resolved synchronously, before any CSS paints, so a
+    light-mode visitor never sees a flash of the default dark shell.
+    This mirrors setTheme()/initTheme() further down the page.
+  -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('logix_theme');
+        var theme = saved || 'light';
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+      } catch (e) { /* localStorage unavailable (private mode, etc.) - default dark stays */ }
+    })();
+  </script>
+
+  <!--
+    All styling lives in styles.css as one static, pre-built file - no
+    Tailwind CDN runtime compiler, no client-side CSS generation. Loaded as
+    a normal stylesheet link so the browser can cache it independently of
+    this HTML across visits and deploys.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+<body class="text-slate-100 min-h-screen antialiased flex flex-col selection-blue pb-24 sm:pb-12">
+  <!-- Icon sprite: every shipment card repeats ~13 of these icons, and a
+       full inline <path> set is 100-300 characters each. With a list of
+       even 20-30 cards that's tens of KB of identical path data rebuilt
+       on every render (every filter/search keystroke re-renders the
+       whole list). Defining each shape once here and referencing it with
+       <use href="#i-name"> everywhere else cuts that down to ~40 bytes
+       per icon instance, so filtering/searching a long list stays snappy. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"/></symbol>
+      <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol>
+      <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H3v5"/><path d="M3 3l7 7"/><path d="M16 21h5v-5"/><path d="m21 21-7-7"/></symbol>
+      <symbol id="i-ruler" viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></symbol>
+      <symbol id="i-map-arrow" viewBox="0 0 24 24"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a1 1 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0l4.553-2.277A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a1 1 0 0 1-1.788 0l-4.212-2.106a1 1 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618"/></symbol>
+      <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18"/><path d="m19 8 3 8a5 5 0 0 1-6 0zV7"/><path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1"/><path d="m5 8 3 8a5 5 0 0 1-6 0zV7"/><path d="M7 21h10"/></symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 2v4"/><path d="M16 2v4"/></symbol>
+      <symbol id="i-calendar-check" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="m9 16 2 2 4-4"/></symbol>
+      <symbol id="i-truck" viewBox="0 0 24 24"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></symbol>
+      <symbol id="i-payment" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></symbol>
+      <symbol id="i-customs-out" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+      <symbol id="i-customs-in" viewBox="0 0 24 24"><path d="M12 6v16"/><path d="m19 13 2-1a9 9 0 0 1-18 0l2 1"/><path d="M9 11h6"/><circle cx="12" cy="4" r="2"/></symbol>
+      <symbol id="i-sticker" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></symbol>
+      <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M13 21h8"/><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+      <symbol id="i-droplet" viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></symbol>
+      <symbol id="i-wheat" viewBox="0 0 24 24"><path d="M2 22 16 8"/><path d="M3.47 12.53 5 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94L5 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/><path d="M7.47 8.53 9 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94L9 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/><path d="M11.47 4.53 13 3l1.53 1.53a3.5 3.5 0 0 1 0 4.94L13 11l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/><path d="M20 2h2v2a4 4 0 0 1-4 4h-2V6a4 4 0 0 1 4-4Z"/><path d="M11.47 17.47 13 19l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L5 19l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z"/><path d="M15.47 13.47 17 15l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L9 15l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z"/><path d="M19.47 9.47 21 11l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L13 11l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z"/></symbol>
+      <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></symbol>
+      <symbol id="i-package" viewBox="0 0 24 24"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><polyline points="3.29 7 12 12 20.71 7"/><path d="m7.5 4.27 9 5.15"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- Apple Global Toast Notification -->
+  <div id="appleToast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 -translate-y-8 flex items-center gap-2 px-4 py-2.5 rounded-2xl apple-glass shadow-2xl text-xs font-semibold text-slate-900 dark:text-white border">
+    <svg class="w-4 h-4 text-emerald-500" id="toastIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10" /> <path d="m9 12 2 2 4-4" /></svg>
+    <span id="toastMessage">Сповіщення</span>
+  </div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 apple-glass px-4 lg:px-8 py-3 border-b gpu-layer safe-top">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+      
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-blue-brand flex items-center justify-center shadow-md shadow-blue-brand ring-1 ring-white/20 shrink-0">
+          <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /> <path d="M15 18H9" /> <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" /> <circle cx="17" cy="18" r="2" /> <circle cx="7" cy="18" r="2" /></svg>
+        </div>
+        <div class="min-w-0">
+          <h1 class="font-bold text-xs sm:text-sm tracking-tight text-slate-900 dark:text-white truncate">
+            Актуальні заявки та фрахт для перевізників <span class="text-blue-brand font-semibold ml-1">2026-2027</span>
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1.5 shrink-0">
+        <!-- Live Data Source Status Badge Indicator -->
+        <div id="dataSourceBadge" class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-bold border apple-glass">
+          <span id="dataSourceDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+          <span id="dataSourceText" class="text-slate-700 dark:text-slate-300">Демо-режим</span>
+        </div>
+
+        <button onclick="toggleTheme()" id="themeBtn" aria-label="Змінити тему" title="Змінити тему" class="w-9 h-9 rounded-xl text-slate-700 dark:text-slate-300 apple-glass hover:opacity-80 active:scale-95 transition-all flex items-center justify-center shadow-sm">
+          <svg class="w-4 h-4 hidden dark:block text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /> <path d="M12 2v2" /> <path d="M12 20v2" /> <path d="m4.93 4.93 1.41 1.41" /> <path d="m17.66 17.66 1.41 1.41" /> <path d="M2 12h2" /> <path d="M20 12h2" /> <path d="m6.34 17.66-1.41 1.41" /> <path d="m19.07 4.93-1.41 1.41" /></svg>
+          <svg class="w-4 h-4 block dark:hidden text-slate-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" /></svg>
+        </button>
+
+        <button onclick="toggleAdminAuth()" id="adminToggleBtn" aria-label="Кабінет" title="Кабінет адміністратора" class="h-9 px-3 rounded-xl text-xs font-semibold apple-glass text-slate-800 dark:text-slate-200 hover:opacity-80 active:scale-95 transition-all flex items-center gap-1.5 shadow-sm">
+          <svg class="w-4 h-4 text-blue-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" /></svg>
+          <span id="adminBtnText" class="hidden sm:inline">Кабінет</span>
+        </button>
+
+        <button onclick="openShipmentModal()" id="addBtn" class="hidden h-9 px-3.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-blue-brand hover:opacity-90 active:scale-95 text-white shadow-md shadow-blue-brand transition-all flex items-center gap-1.5">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /> <path d="M12 5v14" /></svg>
+          <span class="hidden sm:inline">Додати рейс</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-8 space-y-3.5">
+    
+    <!-- Clean Search Bar with Debounce -->
+    <div class="relative w-full max-w-3xl mx-auto">
+      <div class="relative flex items-center">
+        <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 absolute left-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34" /> <circle cx="11" cy="11" r="8" /></svg>
+        <input type="text" id="searchInput" oninput="onSearchInputDebounced()" placeholder="Пошук: місто, країна, продукт, авто..." class="w-full pl-11 pr-11 py-3 rounded-2xl apple-glass text-xs focus:outline-none focus:ring-2 focus:ring-blue-brand transition text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 shadow-md">
+        <button onclick="document.getElementById('searchInput').focus()" class="absolute right-4 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 5H3" /> <path d="M12 19H3" /> <path d="M14 3v4" /> <path d="M16 17v4" /> <path d="M21 12h-9" /> <path d="M21 19h-5" /> <path d="M21 5h-7" /> <path d="M8 10v4" /> <path d="M8 12H3" /></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Vehicle Type & Urgency Chips Bar -->
+    <div class="max-w-3xl mx-auto flex items-center justify-between gap-2 overflow-x-auto pb-0.5 no-scrollbar text-xs font-semibold">
+      <div class="flex items-center gap-1.5 shrink-0">
+        <button onclick="setVehicleTypeChip('all')" id="chip-v-all" class="chip-btn chip-active px-3 py-1.5 rounded-xl whitespace-nowrap transition-all duration-200">
+          Всі машини
+        </button>
+        <button onclick="setVehicleTypeChip('тент')" id="chip-v-тент" class="chip-btn px-3 py-1.5 rounded-xl whitespace-nowrap transition-all duration-200 flex items-center gap-1">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /> <path d="m3.3 7 8.7 5 8.7-5" /> <path d="M12 22V12" /></svg>
+          <span>Тент</span>
+        </button>
+        <button onclick="setVehicleTypeChip('зерновоз')" id="chip-v-зерновоз" class="chip-btn px-3 py-1.5 rounded-xl whitespace-nowrap transition-all duration-200 flex items-center gap-1">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 22 16 8" /> <path d="M3.47 12.53 5 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94L5 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" /> <path d="M7.47 8.53 9 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94L9 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" /> <path d="M11.47 4.53 13 3l1.53 1.53a3.5 3.5 0 0 1 0 4.94L13 11l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" /> <path d="M20 2h2v2a4 4 0 0 1-4 4h-2V6a4 4 0 0 1 4-4Z" /> <path d="M11.47 17.47 13 19l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L5 19l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z" /> <path d="M15.47 13.47 17 15l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L9 15l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z" /> <path d="M19.47 9.47 21 11l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L13 11l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z" /></svg>
+          <span>Зерновоз</span>
+        </button>
+        <button onclick="setVehicleTypeChip('цистерна')" id="chip-v-цистерна" class="chip-btn px-3 py-1.5 rounded-xl whitespace-nowrap transition-all duration-200 flex items-center gap-1">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z" /></svg>
+          <span>Цистерна</span>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-1 shrink-0">
+        <button onclick="setUrgencyFilter('all')" id="chip-u-all" class="chip-btn chip-active px-2.5 py-1.5 rounded-xl text-[11px] whitespace-nowrap transition-all">Всі дати</button>
+        <button onclick="setUrgencyFilter('today_tomorrow')" id="chip-u-today" class="chip-btn px-2.5 py-1.5 rounded-xl text-[11px] whitespace-nowrap transition-all flex items-center gap-1">
+          <span>⚡ Сьогодні / Завтра</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Unified Status / Favorites Tab Bar -->
+    <div class="max-w-3xl mx-auto -mx-1 px-1">
+      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-0.5">
+        <button type="button" onclick="setMainTab('all')" id="tab-all" class="chip-btn shrink-0 px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition-all duration-200">
+          Всі заявки <span id="countAll" class="opacity-70 font-semibold">0</span>
+        </button>
+        <button type="button" onclick="setMainTab('active')" id="tab-searching" class="chip-btn chip-active shrink-0 px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition-all duration-200">
+          Відкриті <span id="activeCountBadge" class="opacity-70 font-semibold">0</span>
+        </button>
+        <button type="button" onclick="setMainTab('completed')" id="tab-confirmed" class="chip-btn shrink-0 px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition-all duration-200">
+          Закриті <span id="completedCountBadge" class="opacity-70 font-semibold">0</span>
+        </button>
+        <button type="button" onclick="setMainTab('bookmarks')" id="tab-bookmarks" class="chip-btn shrink-0 px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition-all duration-200 flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z" /></svg>
+          <span>Обране</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div id="shipmentsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto pt-2">
+      <!-- Skeleton placeholder shown until the first fetch resolves, so the
+           page never looks idle while data is on its way. renderList()
+           always overwrites this innerHTML on the first successful render. -->
+      <div class="card-active-aurora rounded-3xl p-5 sm:p-6 space-y-4" aria-hidden="true">
+        <div class="flex items-center justify-between"><div class="skeleton-shimmer h-6 w-32 rounded-full"></div><div class="skeleton-shimmer h-6 w-16 rounded-xl"></div></div>
+        <div class="space-y-2"><div class="skeleton-shimmer h-4 w-3/4 rounded-lg"></div><div class="skeleton-shimmer h-4 w-1/2 rounded-lg"></div></div>
+        <div class="skeleton-shimmer h-20 w-full rounded-2xl"></div>
+        <div class="skeleton-shimmer h-10 w-full rounded-2xl"></div>
+      </div>
+      <div class="card-active-aurora rounded-3xl p-5 sm:p-6 space-y-4 hidden sm:block" aria-hidden="true">
+        <div class="flex items-center justify-between"><div class="skeleton-shimmer h-6 w-32 rounded-full"></div><div class="skeleton-shimmer h-6 w-16 rounded-xl"></div></div>
+        <div class="space-y-2"><div class="skeleton-shimmer h-4 w-3/4 rounded-lg"></div><div class="skeleton-shimmer h-4 w-1/2 rounded-lg"></div></div>
+        <div class="skeleton-shimmer h-20 w-full rounded-2xl"></div>
+        <div class="skeleton-shimmer h-10 w-full rounded-2xl"></div>
+      </div>
+      <div class="card-active-aurora rounded-3xl p-5 sm:p-6 space-y-4 hidden lg:block" aria-hidden="true">
+        <div class="flex items-center justify-between"><div class="skeleton-shimmer h-6 w-32 rounded-full"></div><div class="skeleton-shimmer h-6 w-16 rounded-xl"></div></div>
+        <div class="space-y-2"><div class="skeleton-shimmer h-4 w-3/4 rounded-lg"></div><div class="skeleton-shimmer h-4 w-1/2 rounded-lg"></div></div>
+        <div class="skeleton-shimmer h-20 w-full rounded-2xl"></div>
+        <div class="skeleton-shimmer h-10 w-full rounded-2xl"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Mobile Navigation Bar -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 apple-glass border-t px-4 pt-2 pb-2 sm:hidden flex items-center justify-around safe-bottom">
+    <button onclick="setMainTab('active'); window.scrollTo({top:0, behavior:'smooth'});" class="flex flex-col items-center gap-1 text-blue-brand">
+      <div class="w-9 h-7 rounded-xl bg-blue-soft flex items-center justify-center">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1" /> <rect width="7" height="7" x="14" y="3" rx="1" /> <rect width="7" height="7" x="14" y="14" rx="1" /> <rect width="7" height="7" x="3" y="14" rx="1" /></svg>
+      </div>
+      <span class="text-[10px] font-bold">Дошка</span>
+    </button>
+    <button onclick="document.getElementById('searchInput').focus()" class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34" /> <circle cx="11" cy="11" r="8" /></svg>
+      <span class="text-[10px] font-medium">Пошук</span>
+    </button>
+
+    <button onclick="isAdminActive ? openShipmentModal() : toggleAdminAuth()" aria-label="Додати рейс" title="Додати рейс" class="relative -mt-7 w-14 h-14 rounded-full btn-gradient-apple text-white flex items-center justify-center shadow-lg shadow-blue-brand ring-4 ring-[var(--bg)] active:scale-95 transition-all">
+      <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /> <path d="M12 5v14" /></svg>
+    </button>
+
+    <button onclick="openNotificationModal()" class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 relative">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0" /> <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" /></svg>
+      <span class="w-2 h-2 rounded-full bg-emerald-500 absolute top-0 right-3"></span>
+      <span class="text-[10px] font-medium">Сповіщення</span>
+    </button>
+    <button onclick="toggleAdminAuth()" class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" /></svg>
+      <span class="text-[10px] font-medium">Профіль</span>
+    </button>
+  </nav>
+
+  <!-- Notification Center Dialog -->
+  <div id="notificationModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-4" onclick="handleBackdropClick(event, 'notificationModal')">
+    <div class="apple-glass w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4 text-slate-900 dark:text-slate-100">
+      <div class="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-xl bg-blue-soft flex items-center justify-center text-blue-brand">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0" /> <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" /></svg>
+          </div>
+          <h3 class="text-sm font-bold">Центр сповіщень</h3>
+        </div>
+        <button onclick="closeNotificationModal()" class="modal-close-btn w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 hover:opacity-80 flex items-center justify-center text-slate-500 dark:text-slate-400 transition">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></svg>
+        </button>
+      </div>
+      <div id="notificationList" class="space-y-2.5 text-xs max-h-72 overflow-y-auto"></div>
+      <button onclick="closeNotificationModal()" class="w-full py-2.5 rounded-2xl apple-glass text-xs font-semibold hover:opacity-90">Зрозуміло</button>
+    </div>
+  </div>
+
+  <!-- Interactive Google Maps Modal Engine -->
+  <div id="mapModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-4" onclick="handleBackdropClick(event, 'mapModal')">
+    <div class="apple-glass w-full max-w-3xl rounded-3xl shadow-2xl flex flex-col overflow-hidden text-slate-900 dark:text-slate-100 max-h-[92vh]">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-black/10 dark:border-white/10">
+        <div>
+          <h3 id="mapModalRouteTitle" class="text-sm font-bold">Маршрут перевезення (Google Maps)</h3>
+          <p id="mapModalDistanceSubtitle" class="text-[11px] text-slate-500 dark:text-slate-400">Орієнтовна відстань</p>
+        </div>
+        <button onclick="closeMapModal()" class="modal-close-btn w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 hover:opacity-80 flex items-center justify-center text-slate-500 dark:text-slate-400 transition">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></svg>
+        </button>
+      </div>
+      
+      <div class="relative w-full h-[55vh] bg-slate-200 dark:bg-slate-900">
+        <iframe id="googleMapsIframe" class="w-full h-full border-0" loading="lazy" allowfullscreen src=""></iframe>
+      </div>
+
+      <div class="p-4 border-t border-black/10 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <a id="mapModalGoogleMapsDirect" href="#" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-blue-btn shadow-md shadow-blue-brand flex items-center justify-center gap-2 transition">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="3 11 22 2 13 21 11 13 3 11" /></svg>
+          <span>Відкрити в Google Maps (Повна навігація)</span>
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6" /> <path d="M10 14 21 3" /> <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg>
+        </a>
+        <button onclick="closeMapModal()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-semibold apple-glass hover:opacity-80">Закрити</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Image/Sticker Generator -->
+  <div id="stickerModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-4" onclick="handleBackdropClick(event, 'stickerModal')">
+    <div class="apple-glass w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4 text-slate-900 dark:text-slate-100 flex flex-col items-center">
+      <div class="w-full flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-3">
+        <h3 class="text-sm font-bold">Стікер заявки для соцмереж</h3>
+        <button onclick="closeStickerModal()" class="text-slate-400 hover:text-white"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></svg></button>
+      </div>
+
+      <canvas id="stickerCanvas" width="600" height="600" class="w-72 h-72 rounded-2xl shadow-xl border border-white/15 bg-[#0d1424]"></canvas>
+
+      <div class="w-full flex gap-2 pt-2">
+        <button onclick="downloadStickerImage()" class="flex-1 py-2.5 rounded-xl bg-blue-btn text-white text-xs font-bold flex items-center justify-center gap-1.5 transition">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></svg> Зберегти картинку
+        </button>
+        <button onclick="closeStickerModal()" class="px-4 py-2.5 rounded-xl apple-glass text-xs font-semibold">Закрити</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Proposal Modal -->
+  <div id="proposalModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-4" onclick="handleBackdropClick(event, 'proposalModal')">
+    <div class="apple-glass w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4 text-slate-900 dark:text-slate-100">
+      <div class="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-3">
+        <div>
+          <h3 class="text-sm font-bold">Запропонувати авто / узгодити ставку</h3>
+          <p class="text-[11px] text-slate-600 dark:text-slate-400">Оберіть зручний прямий канал зв'язку</p>
+        </div>
+        <button onclick="closeProposalModal()" class="modal-close-btn w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 hover:opacity-80 flex items-center justify-center text-slate-500 dark:text-slate-400 transition">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></svg>
+        </button>
+      </div>
+      <div id="proposalContent" class="space-y-3 text-xs"></div>
+    </div>
+  </div>
+
+  <!-- Modal Dialog: Create / Edit Record -->
+  <div id="shipmentModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-4" onclick="handleBackdropClick(event, 'shipmentModal')">
+    <div class="apple-glass w-full max-w-2xl rounded-3xl p-6 sm:p-7 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto text-slate-900 dark:text-slate-100">
+      
+      <div class="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-4">
+        <div>
+          <h3 id="modalTitle" class="text-base font-bold tracking-tight">Нова заявка на фрахт</h3>
+          <p class="text-[11px] text-slate-600 dark:text-slate-400">Вкажіть актуальні умови завантаження та оплати</p>
+        </div>
+        <button onclick="closeModal()" class="modal-close-btn w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 hover:opacity-80 flex items-center justify-center text-slate-500 dark:text-slate-400 transition">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></svg>
+        </button>
+      </div>
+
+      <form id="shipmentForm" onsubmit="handleFormSubmit(event)" class="space-y-4 text-xs">
+        <input type="hidden" id="editId">
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+          <div class="sm:col-span-2">
+            <label class="block font-semibold mb-1.5 text-slate-700 dark:text-slate-300">Тип машини / Причіп *</label>
+            <input type="text" id="truck_type" maxlength="100" required placeholder="Тент 86–92м³, Зерновоз, Цистерна" class="w-full px-3.5 py-2.5 rounded-xl inner-cell focus-blue outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold mb-1.5 text-slate-700 dark:text-slate-300">Кількість авто *</label>
+            <input type="number" id="trucks_count" min="1" max="50" required value="1" class="w-full px-3.5 py-2.5 rounded-xl inner-cell focus-blue outline-none font-bold">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-1.5 text-slate-700 dark:text-slate-300">Продукт / Вантаж *</label>
+          <input type="text" id="product" maxlength="150" required placeholder="Шрот соєвий (біг-беги), Кукурудза, Олія" class="w-full px-3.5 py-2.5 rounded-xl inner-cell focus-blue outline-none">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block font-semibold mb-1.5 text-slate-700 dark:text-slate-300">Місце завантаження *</label>
+            <input type="text" id="loading_location" maxlength="255" required placeholder="м. Вінниця (UA)" class="w-full px-3.5 py-2.5 rounded-xl inner-cell focus-blue outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold mb-1.5 text-slate-700 dark:text-slate-300">Місце розвантаження *</label>
+            <input type="text" id="unloading_location" maxlength="255" required placeholder="м. Хелм (PL) / Берлін (DE)" class="w-full px-3.5 py-2.5 rounded-xl inner-cell focus-blue outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block font-semibold mb-1.5 text-slate-700 dark:text-slate-300">Дата завантаження *</label>
+            <input type="date" id="loading_date" required class="w-full px-3.5 py-2.5 rounded-xl inner-cell focus-blue outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold mb-1.5 text-slate-700 dark:text-slate-300">Вага / Об'єм *</label>
+            <input type="text" id="weight" maxlength="50" required placeholder="22 т / 86 м³" class="w-full px-3.5 py-2.5 rounded-xl inner-cell focus-blue outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block font-semibold mb-1.5 text-slate-700 dark:text-slate-300">Умови оплати</label>
+            <input type="text" id="payment_terms" maxlength="150" placeholder="5 б.д. по сканах CMR" class="w-full px-3.5 py-2.5 rounded-xl inner-cell focus-blue outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold mb-1.5 text-slate-700 dark:text-slate-300">Телефон диспетчера</label>
+            <input type="text" id="contact_phone" maxlength="50" placeholder="+380989749954" value="+380989749954" class="w-full px-3.5 py-2.5 rounded-xl inner-cell focus-blue outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block font-semibold mb-1.5 text-slate-700 dark:text-slate-300">Замитнення</label>
+            <input type="text" id="customs_clearance_out" maxlength="255" placeholder="Вінницька митниця / Не потрібно" class="w-full px-3.5 py-2.5 rounded-xl inner-cell focus-blue outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold mb-1.5 text-slate-700 dark:text-slate-300">Розмитнення</label>
+            <input type="text" id="customs_clearance_in" maxlength="255" placeholder="Дорогуськ (PL) / Не потрібно" class="w-full px-3.5 py-2.5 rounded-xl inner-cell focus-blue outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block font-semibold mb-1.5 text-slate-700 dark:text-slate-300">Ставка / Ціна</label>
+            <input type="text" id="price" maxlength="100" placeholder="1 250 EUR / Договірна" class="w-full px-3.5 py-2.5 rounded-xl inner-cell focus-blue outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold mb-1.5 text-slate-700 dark:text-slate-300">Статус заявки</label>
+            <select id="status" class="w-full px-3.5 py-2.5 rounded-xl inner-cell focus-blue outline-none">
+              <option value="active">Актуально (Шукаємо авто)</option>
+              <option value="completed">Закрита заявка</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-1.5 text-slate-700 dark:text-slate-300">Примітки та коментарі</label>
+          <textarea id="notes" rows="2" placeholder="Верхнє/бокове завантаження, ремені обов'язково..." class="w-full px-3.5 py-2.5 rounded-xl inner-cell focus-blue outline-none"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2.5 pt-4 border-t border-black/10 dark:border-white/10">
+          <button type="button" onclick="closeModal()" class="px-4 py-2.5 rounded-xl bg-black/5 dark:bg-white/5 hover:opacity-80 font-medium transition">Скасувати</button>
+          <button type="submit" id="saveSubmitBtn" class="px-5 py-2.5 rounded-xl btn-gradient-apple text-white font-semibold shadow-lg transition flex items-center gap-1.5">
+            <span id="saveSubmitText">Зберегти</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js" defer></script>
+
+</body>
+</html>
