@@ -337,15 +337,15 @@
       // Стікер малюється в тій темі (світла/темна), в якій зараз працює користувач.
       const isDark = document.documentElement.classList.contains('dark');
       const palette = isDark ? {
-        gradFrom: '#0E0E0C', gradTo: '#181815', panelFill: 'rgba(241,239,230,0.04)', panelStroke: '#D4FF3A',
-        badgeFill: '#D4FF3A', badgeText: '#0E0E0C', priceText: '#D4FF3A', labelText: '#8E8C80', valueText: '#F1EFE6',
-        unloadingText: '#D4FF3A', divider: 'rgba(241,239,230,0.14)', dateText: '#D4FF3A', footerFill: '#D4FF3A',
-        footerText: '#0E0E0C', canvasBg: '#0E0E0C'
+        gradFrom: '#13151C', gradTo: '#0A0B10', panelFill: 'rgba(255,255,255,0.04)', panelStroke: '#5B83FF',
+        badgeFill: '#5B83FF', badgeText: '#ffffff', priceText: '#8FAAFF', labelText: '#9AA1B2', valueText: '#F4F5F9',
+        unloadingText: '#35D399', divider: 'rgba(255,255,255,0.12)', dateText: '#8FAAFF', footerFill: '#5B83FF',
+        footerText: '#ffffff', canvasBg: '#0A0B10'
       } : {
-        gradFrom: '#ECEAE3', gradTo: '#E3E1D8', panelFill: 'rgba(21,20,15,0.03)', panelStroke: '#15140F',
-        badgeFill: '#15140F', badgeText: '#D4FF3A', priceText: '#15140F', labelText: '#6B6A60', valueText: '#15140F',
-        unloadingText: '#C2310F', divider: 'rgba(21,20,15,0.16)', dateText: '#C2310F', footerFill: '#15140F',
-        footerText: '#D4FF3A', canvasBg: '#ECEAE3'
+        gradFrom: '#FFFFFF', gradTo: '#EEF1F8', panelFill: 'rgba(15,20,45,0.02)', panelStroke: '#3D63F5',
+        badgeFill: '#3D63F5', badgeText: '#ffffff', priceText: '#2F4FD6', labelText: '#626A7D', valueText: '#0F1220',
+        unloadingText: '#0B7D51', divider: 'rgba(15,20,45,0.12)', dateText: '#2F4FD6', footerFill: '#3D63F5',
+        footerText: '#ffffff', canvasBg: '#FFFFFF'
       };
 
       const canvas = document.getElementById('stickerCanvas');
@@ -489,10 +489,10 @@
     function setTheme(theme) {
       if (theme === 'dark') {
         document.documentElement.classList.add('dark');
-        document.getElementById('themeColorMeta').setAttribute('content', '#0E0E0C');
+        document.getElementById('themeColorMeta').setAttribute('content', '#0A0B10');
       } else {
         document.documentElement.classList.remove('dark');
-        document.getElementById('themeColorMeta').setAttribute('content', '#ECEAE3');
+        document.getElementById('themeColorMeta').setAttribute('content', '#F3F4F8');
       }
       localStorage.setItem('logix_theme', theme);
     }
