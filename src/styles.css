@@ -468,89 +468,102 @@ header{background:color-mix(in srgb, var(--surface-strong) 92%, transparent)!imp
 .dark .text-orange-400,.dark\:text-orange-400:is(.dark *){color:var(--gold-ink)!important}
 
 
+
 /* ==========================================================
-   v7 — «CALM DEPTH»: глибокі шари, м'які великі форми,
-   один електричний акцент. Керується токенами; перекриває
-   попередню палітру. Dark-first, світла тема — повноцінна.
+   v8 — APPLE (iOS 26 / Liquid Glass)
+   Контент — на щільних grouped-поверхнях; прозорий «рідкий
+   метал-скло» лише у плаваючих контролах (шапка, таб-бар,
+   фільтри, оверлеї карти). Системні кольори та шрифт SF Pro,
+   концентричні радіуси, капсульні кнопки, bottom-sheet.
    ========================================================== */
 html:not(.dark){
-  --bg:#F3F4F8;--surface:#fff;--surface-strong:#fff;--surface-2:#F0F2F7;
-  --border:rgba(15,20,45,.08);--border-strong:rgba(15,20,45,.16);
-  --text-1:#0F1220;--text-2:#626A7D;
-  --blue:#3D63F5;--blue-2:#2F4FD6;--blue-ink:#2F4FD6;--on-blue:#fff;
-  --accent:#3D63F5;--accent-2:#3D63F5;
-  --gold:#12A36B;--gold-ink:#0B7D51;--rose:#F0532D;--rose-ink:#C9401D;--emerald:#8A90A0;--emerald-ink:#626A7D;
-  --shadow-ambient:0 1px 2px rgba(15,20,45,.04),0 18px 36px -20px rgba(15,20,45,.16);--glow:none;--grad-1:transparent;--grad-2:transparent}
+  --bg:#F2F2F7;--surface:#fff;--surface-strong:#fff;--surface-2:rgba(120,120,128,.12);
+  --border:rgba(60,60,67,.12);--border-strong:rgba(60,60,67,.29);
+  --text-1:#000;--text-2:rgba(60,60,67,.6);
+  --blue:#007AFF;--blue-2:#0062CC;--blue-ink:#007AFF;--accent:#007AFF;--accent-2:#007AFF;
+  --gold:#34C759;--gold-ink:#248A3D;--rose:#FF3B30;--rose-ink:#D70015;--emerald:#8E8E93;--emerald-ink:#636366;
+  --glass:rgba(255,255,255,.62);--glass-edge:inset 0 0 0 .5px rgba(255,255,255,.6),inset 0 1px 0 rgba(255,255,255,.8);
+  --lift:0 .5px 1px rgba(0,0,0,.04),0 8px 24px -12px rgba(0,0,0,.12);--shadow-ambient:var(--lift);--glow:none;--grad-1:transparent;--grad-2:transparent}
 .dark{
-  --bg:#0A0B10;--surface:#13151C;--surface-strong:#13151C;--surface-2:#1B1E28;
-  --border:rgba(255,255,255,.07);--border-strong:rgba(255,255,255,.16);
-  --text-1:#F4F5F9;--text-2:#9AA1B2;
-  --blue:#5B83FF;--blue-2:#3F66F0;--blue-ink:#8FAAFF;--on-blue:#fff;
-  --accent:#7B9BFF;--accent-2:#7B9BFF;
-  --gold:#35D399;--gold-ink:#5BE3AF;--rose:#FF6A44;--rose-ink:#FF9477;--emerald:#7C8396;--emerald-ink:#9AA1B2;
-  --shadow-ambient:0 20px 40px -24px rgba(0,0,0,.7);--glow:none;--grad-1:transparent;--grad-2:transparent}
+  --bg:#000;--surface:#1C1C1E;--surface-strong:#1C1C1E;--surface-2:rgba(120,120,128,.24);
+  --border:rgba(84,84,88,.45);--border-strong:rgba(84,84,88,.8);
+  --text-1:#fff;--text-2:rgba(235,235,245,.6);
+  --blue:#0A84FF;--blue-2:#409CFF;--blue-ink:#409CFF;--accent:#0A84FF;--accent-2:#409CFF;
+  --gold:#30D158;--gold-ink:#30D158;--rose:#FF453A;--rose-ink:#FF6961;--emerald:#8E8E93;--emerald-ink:#98989D;
+  --glass:rgba(44,44,46,.58);--glass-edge:inset 0 0 0 .5px rgba(255,255,255,.16),inset 0 1px 0 rgba(255,255,255,.2);
+  --lift:none;--shadow-ambient:none;--glow:none;--grad-1:transparent;--grad-2:transparent}
 
-body,button,input,select,textarea{font-family:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif!important;letter-spacing:-.011em;font-variant-numeric:tabular-nums}
-/* Єдине тихе світіння зверху — глибина без «аврори» */
-body::before,.dark body::before{background-image:radial-gradient(ellipse 60% 32% at 50% -4%,color-mix(in srgb,var(--blue) 16%,transparent),transparent 70%)!important;background-size:auto!important;opacity:1}
-.text-\[10px\],.text-\[11px\]{font-weight:600;letter-spacing:.01em}
+body,button,input,select,textarea{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",system-ui,"Segoe UI",Roboto,sans-serif!important;letter-spacing:-.011em;font-variant-numeric:tabular-nums}
+body::before,.dark body::before{display:none}
+.text-\[10px\],.text-\[11px\]{font-weight:500;letter-spacing:0}
+button{transition:transform .35s cubic-bezier(.32,.72,0,1),background-color .2s,opacity .2s}
+button:active{transform:scale(.97)}
 
-/* Форми: великі м'які радіуси */
-.rounded-3xl{border-radius:28px!important}.rounded-2xl{border-radius:18px!important}.rounded-xl{border-radius:14px!important}.rounded-lg{border-radius:10px!important}
+/* Радіуси — концентричні: картка 26 → внутрішні 18 → дрібні 12 */
+.rounded-3xl{border-radius:26px!important}.rounded-2xl{border-radius:18px!important}.rounded-xl{border-radius:12px!important}.rounded-lg{border-radius:9px!important}
 .shadow-lg,.shadow-md,.shadow-sm,.shadow-xl,.shadow-2xl,.shadow-blue-brand{box-shadow:none!important}
-.apple-glass{background:var(--surface)!important;border:1px solid var(--border)!important;backdrop-filter:none!important}
 .inner-cell{background:var(--surface-2)!important;border:0!important}
-.fixed.inset-0{background:rgba(5,6,10,.6)!important;backdrop-filter:blur(10px)}
-.fixed.inset-0>.apple-glass{border:1px solid var(--border-strong)!important;box-shadow:0 40px 80px -30px rgba(0,0,0,.6)!important}
+.apple-glass{background:var(--surface)!important;border:0!important;backdrop-filter:none!important}
 
-/* Шапка: напівпрозора, без лінії-«рамки» */
-header{background:color-mix(in srgb,var(--bg) 78%,transparent)!important;backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);border-bottom:1px solid var(--border)!important}
-header h1{font-weight:700;letter-spacing:-.02em}
-.from-blue-brand,.bg-blue-btn,.btn-gradient-apple,.active-pill-glow{background:linear-gradient(180deg,color-mix(in srgb,var(--blue) 88%,#fff),var(--blue))!important;color:#fff!important;border:0!important}
-.bg-blue-btn:hover,.btn-gradient-apple:hover{background:var(--blue-2)!important;transform:translateY(-1px);box-shadow:0 10px 24px -10px var(--blue)!important}
+/* Liquid Glass: шапка */
+header{background:var(--glass)!important;backdrop-filter:blur(28px) saturate(190%);-webkit-backdrop-filter:blur(28px) saturate(190%);border-bottom:.5px solid var(--border)!important}
+header h1{font-weight:600;letter-spacing:-.022em}
+.from-blue-brand,.bg-blue-btn,.btn-gradient-apple,.active-pill-glow{background:var(--blue)!important;background-image:none!important;color:#fff!important;border:0!important}
+.bg-blue-btn:hover,.btn-gradient-apple:hover{background:var(--blue-2)!important;transform:none;box-shadow:none}
 .from-blue-brand svg,.btn-gradient-apple svg,.bg-blue-btn svg{color:#fff}
-.btn-gradient-apple,.bg-blue-btn{font-weight:700}
+.from-blue-brand{border-radius:10px!important}
+.btn-gradient-apple,.bg-blue-btn{font-weight:600}
+#themeBtn,#adminToggleBtn,#dataSourceBadge{background:var(--surface-2)!important;border:0!important;border-radius:999px!important}
 
-/* Пошук і фільтри */
-#searchInput{background:var(--surface)!important;border:1px solid var(--border)!important;border-radius:18px!important;padding-top:15px!important;padding-bottom:15px!important;font-size:14px!important;box-shadow:var(--shadow-ambient)!important}
-#searchInput:focus{border-color:var(--blue)!important}
-.chip-btn{border-radius:999px!important;background:var(--surface)!important;border:1px solid var(--border)!important;color:var(--text-2)!important;font-weight:600!important;text-transform:none;letter-spacing:0!important;font-size:12.5px!important}
-.chip-active{background:var(--text-1)!important;color:var(--bg)!important;border-color:var(--text-1)!important;box-shadow:none!important}
+/* Пошук — капсульне iOS-поле */
+#searchInput{background:var(--surface-2)!important;border:0!important;border-radius:999px!important;padding-top:13px!important;padding-bottom:13px!important;font-size:16px!important;box-shadow:none!important}
+#searchInput:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 35%,transparent)!important}
+/* Фільтри — капсули; активний — синій tint */
+.chip-btn{border-radius:999px!important;background:var(--surface)!important;border:0!important;color:var(--text-1)!important;font-weight:500!important;font-size:13px!important;box-shadow:var(--lift)}
+.dark .chip-btn{background:var(--surface-2)!important}
+.chip-active,.dark .chip-active{background:var(--blue)!important;color:#fff!important;box-shadow:none!important}
 
-/* ЗАЯВКА: велика м'яка картка */
-.shipment-card,.dark .shipment-card{border-radius:28px!important;padding:20px!important;background:var(--surface)!important;border:1px solid var(--border)!important;box-shadow:var(--shadow-ambient)!important;overflow:hidden;transition:transform .25s cubic-bezier(.2,.8,.2,1),border-color .25s}
-@media (hover:hover){.shipment-card:hover{transform:translateY(-3px);border-color:var(--border-strong)!important}}
-.shipment-card.card-hot{border-color:color-mix(in srgb,var(--rose) 45%,transparent)!important;background:linear-gradient(180deg,color-mix(in srgb,var(--rose) 9%,var(--surface)),var(--surface) 42%)!important}
-.shipment-card.card-confirmed{opacity:.68}
-.shipment-card.card-confirmed:hover{opacity:1}
-/* Статус — м'яка таблетка */
-.badge-hot,.badge-searching,.badge-confirmed{border-radius:999px!important;border:0!important;font-size:11px!important;font-weight:700!important;letter-spacing:.01em}
+/* Картка — grouped-поверхня, без рамок */
+.shipment-card,.dark .shipment-card{border-radius:26px!important;padding:18px!important;background:var(--surface)!important;border:0!important;box-shadow:var(--lift)!important;transition:transform .45s cubic-bezier(.32,.72,0,1)}
+@media (hover:hover){.shipment-card:hover{transform:scale(1.008)}}
+.shipment-card.card-confirmed{opacity:.62}
+/* Статус — тонована капсула (як у системних бейджах) */
+.badge-hot,.badge-searching,.badge-confirmed{border-radius:999px!important;border:0!important;font-size:12px!important;font-weight:600!important;letter-spacing:0}
 .badge-searching{background:color-mix(in srgb,var(--gold) 16%,transparent)!important}
-.badge-hot{background:color-mix(in srgb,var(--rose) 18%,transparent)!important}
+.badge-hot{background:color-mix(in srgb,var(--rose) 14%,transparent)!important}
 .badge-confirmed{background:var(--surface-2)!important}
-/* Маршрут — головний акцент картки */
-.shipment-card .text-\[15px\]{font-size:21px!important;line-height:1.1!important;font-weight:750!important;letter-spacing:-.03em!important}
-.shipment-card .route-line{width:2px!important;opacity:.55!important;border-radius:2px}
-/* Карта */
-.route-preview{height:150px;border-radius:20px;border:0;box-shadow:inset 0 0 0 1px var(--border)}
-html:not(.dark) .route-preview iframe{filter:saturate(.75) contrast(.98)}
-.dark .route-preview iframe{filter:invert(92%) hue-rotate(190deg) saturate(.6) brightness(.92) contrast(.9)}
-.route-pin{width:28px;height:28px;border-radius:50%;transform:none;background:var(--text-1);color:var(--bg);border:3px solid var(--surface)}.route-pin span{transform:none}
-.route-pin-b{background:var(--blue);color:#fff}
-.route-label,.route-distance,.route-expand{border-radius:12px;background:color-mix(in srgb,var(--surface) 82%,transparent);color:var(--text-1);backdrop-filter:blur(10px);border:1px solid var(--border)}
+/* Маршрут — як великий заголовок iOS */
+.shipment-card .text-\[15px\]{font-size:20px!important;line-height:1.15!important;font-weight:600!important;letter-spacing:-.025em!important}
+.shipment-card .route-line{width:2px!important;opacity:.4!important}
+/* Карта + скляні оверлеї */
+.route-preview{height:156px;border-radius:18px;border:0;box-shadow:none}
+html:not(.dark) .route-preview iframe{filter:saturate(.8)}
+.dark .route-preview iframe{filter:invert(92%) hue-rotate(190deg) saturate(.55) brightness(.9) contrast(.9)}
+.route-pin{width:26px;height:26px;border-radius:50%;transform:none;background:var(--rose);color:#fff;border:3px solid #fff}.route-pin span{transform:none}
+.route-pin-b{background:var(--blue)}
+.route-label,.route-distance,.route-expand{border-radius:999px;background:var(--glass);color:var(--text-1);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);box-shadow:var(--glass-edge);border:0}
+.route-expand{border-radius:50%}
 .route-info{border-radius:14px!important;background:transparent!important;padding-left:2px!important}
-/* Низ картки без перфорації */
 .ticket-foot{margin:0!important;padding:0!important;border:0!important}
 .ticket-foot::before,.ticket-foot::after{display:none!important}
-.ticket-foot .btn-gradient-apple{border-radius:16px;padding-top:15px;padding-bottom:15px;font-size:14px}
-.detail-icon,.dark .detail-icon{background:color-mix(in srgb,var(--blue) 14%,transparent)!important;color:var(--blue-ink)!important;border-radius:10px!important}
-.detail-icon-plain,.dark .detail-icon-plain{color:var(--blue-ink)!important}
+.ticket-foot .btn-gradient-apple{border-radius:999px;padding-top:15px;padding-bottom:15px;font-size:15px}
+.detail-icon,.dark .detail-icon{background:color-mix(in srgb,var(--blue) 14%,transparent)!important;color:var(--blue-ink)!important;border-radius:9px!important}
+.detail-icon-plain,.dark .detail-icon-plain,.text-blue-brand,.dark .text-blue-brand{color:var(--blue-ink)!important}
+.bg-blue-soft{background:color-mix(in srgb,var(--blue) 15%,transparent)!important;color:var(--blue-ink)!important}
 
-/* Плаваюча нижня навігація */
-nav.fixed{left:12px!important;right:12px!important;bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;border-radius:28px;background:color-mix(in srgb,var(--surface) 82%,transparent)!important;backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid var(--border-strong)!important;box-shadow:0 20px 40px -18px rgba(0,0,0,.5);padding-bottom:.5rem!important}
-nav .btn-gradient-apple{border-radius:50%!important}
-.text-blue-brand,.dark .text-blue-brand{color:var(--blue-ink)!important}
-.bg-blue-soft{background:color-mix(in srgb,var(--blue) 18%,transparent)!important;color:var(--blue-ink)!important}
-#appleToast{border:1px solid var(--border-strong)!important;border-radius:999px!important}
-.focus-blue:focus{border-color:var(--blue)!important;box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 22%,transparent)}
-.selection-blue ::selection,.selection-blue::selection{background:var(--blue)!important;color:#fff!important}
+/* Liquid Glass: плаваючий таб-бар */
+nav.fixed{left:14px!important;right:14px!important;bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;border-radius:34px;background:var(--glass)!important;backdrop-filter:blur(28px) saturate(190%);-webkit-backdrop-filter:blur(28px) saturate(190%);border:0!important;box-shadow:var(--glass-edge),0 12px 40px -8px rgba(0,0,0,.25);padding-bottom:.5rem!important}
+nav .btn-gradient-apple{border-radius:50%!important;--tw-ring-color:transparent!important;box-shadow:0 6px 16px -4px color-mix(in srgb,var(--blue) 60%,transparent)!important}
+
+/* Модалки: центрований скляний діалог на десктопі, bottom-sheet на телефоні */
+.fixed.inset-0{background:rgba(0,0,0,.38)!important;backdrop-filter:blur(6px)}
+.fixed.inset-0>.apple-glass{position:relative;border-radius:30px!important;box-shadow:0 30px 80px -20px rgba(0,0,0,.45)!important}
+@media(max-width:640px){
+  .fixed.inset-0{align-items:flex-end!important;padding:0!important}
+  .fixed.inset-0>.apple-glass{max-width:none!important;border-radius:30px 30px 0 0!important;padding-top:26px!important;padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))!important}
+  .fixed.inset-0>.apple-glass::before{content:"";position:absolute;top:8px;left:50%;width:36px;height:5px;margin-left:-18px;border-radius:3px;background:var(--border-strong)}
+}
+#appleToast{background:var(--glass)!important;backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:0!important;border-radius:999px!important;box-shadow:var(--glass-edge),0 10px 30px -8px rgba(0,0,0,.3)!important}
+.inner-cell.focus-blue,input.inner-cell,select.inner-cell,textarea.inner-cell{font-size:16px}
+.focus-blue:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 35%,transparent)}
+.selection-blue ::selection,.selection-blue::selection{background:color-mix(in srgb,var(--blue) 35%,transparent)!important;color:inherit!important}

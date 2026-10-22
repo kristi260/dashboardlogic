@@ -337,14 +337,14 @@
       // Стікер малюється в тій темі (світла/темна), в якій зараз працює користувач.
       const isDark = document.documentElement.classList.contains('dark');
       const palette = isDark ? {
-        gradFrom: '#13151C', gradTo: '#0A0B10', panelFill: 'rgba(255,255,255,0.04)', panelStroke: '#5B83FF',
-        badgeFill: '#5B83FF', badgeText: '#ffffff', priceText: '#8FAAFF', labelText: '#9AA1B2', valueText: '#F4F5F9',
-        unloadingText: '#35D399', divider: 'rgba(255,255,255,0.12)', dateText: '#8FAAFF', footerFill: '#5B83FF',
-        footerText: '#ffffff', canvasBg: '#0A0B10'
+        gradFrom: '#1C1C1E', gradTo: '#000000', panelFill: 'rgba(255,255,255,0.05)', panelStroke: '#0A84FF',
+        badgeFill: '#0A84FF', badgeText: '#ffffff', priceText: '#409CFF', labelText: '#98989D', valueText: '#FFFFFF',
+        unloadingText: '#30D158', divider: 'rgba(255,255,255,0.14)', dateText: '#409CFF', footerFill: '#0A84FF',
+        footerText: '#ffffff', canvasBg: '#000000'
       } : {
-        gradFrom: '#FFFFFF', gradTo: '#EEF1F8', panelFill: 'rgba(15,20,45,0.02)', panelStroke: '#3D63F5',
-        badgeFill: '#3D63F5', badgeText: '#ffffff', priceText: '#2F4FD6', labelText: '#626A7D', valueText: '#0F1220',
-        unloadingText: '#0B7D51', divider: 'rgba(15,20,45,0.12)', dateText: '#2F4FD6', footerFill: '#3D63F5',
+        gradFrom: '#FFFFFF', gradTo: '#F2F2F7', panelFill: 'rgba(120,120,128,0.06)', panelStroke: '#007AFF',
+        badgeFill: '#007AFF', badgeText: '#ffffff', priceText: '#007AFF', labelText: '#6C6C70', valueText: '#000000',
+        unloadingText: '#248A3D', divider: 'rgba(60,60,67,0.18)', dateText: '#007AFF', footerFill: '#007AFF',
         footerText: '#ffffff', canvasBg: '#FFFFFF'
       };
 
@@ -489,10 +489,10 @@
     function setTheme(theme) {
       if (theme === 'dark') {
         document.documentElement.classList.add('dark');
-        document.getElementById('themeColorMeta').setAttribute('content', '#0A0B10');
+        document.getElementById('themeColorMeta').setAttribute('content', '#000000');
       } else {
         document.documentElement.classList.remove('dark');
-        document.getElementById('themeColorMeta').setAttribute('content', '#F3F4F8');
+        document.getElementById('themeColorMeta').setAttribute('content', '#F2F2F7');
       }
       localStorage.setItem('logix_theme', theme);
     }

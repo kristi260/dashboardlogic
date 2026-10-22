@@ -3,7 +3,7 @@
 ## v6.1.0
 - **Баг виправлено:** заявки більше не закриваються автоматично. Прибрано автоархівацію з `api/shipments.js` і SQL-тригер з `supabase/schema.sql`. Заявка висить, поки адмін не натисне «Закрити» (або не змінить статус у редагуванні). Закриту можна «Відкрити знову».
 - **Дату розвантаження прибрано** (форма, картка, API). Дата завантаження ставиться вручну.
-- **Новий дизайн** «Calm Depth» (див. кінець `styles.css`).
+- **Новий дизайн** Apple (Liquid Glass, iOS 26) (див. кінець `styles.css`).
 - ⚠️ Якщо схему вже застосовано в Supabase, виконайте в SQL Editor: `DROP TRIGGER IF EXISTS trg_archive_expired ON public.shipments; DROP FUNCTION IF EXISTS archive_expired_shipments();`
 - Заявки, які старий код уже встиг закрити, можна повернути: `UPDATE public.shipments SET status='active' WHERE status='completed';` (або відкрити по одній кнопкою).
 - Продакшн-файли в корені тепер не мінімізовані (копії `src/`).
