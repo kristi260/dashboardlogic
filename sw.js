@@ -1,6 +1,6 @@
 // Minimal app-shell cache. Bump CACHE_NAME on every deploy so returning
 // visitors pick up the new version instead of a stale cached copy.
-const CACHE_NAME = 'logihub-shell-v9-0-0';
+const CACHE_NAME = 'logihub-shell-v10-0-0';
 const SHELL_FILES = [
   './',
   './index.html',

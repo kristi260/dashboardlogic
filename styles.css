@@ -569,3 +569,51 @@ nav .btn-gradient-apple{border-radius:50%!important;box-shadow:0 6px 18px -4px c
 input.inner-cell,select.inner-cell,textarea.inner-cell{font-size:16px}
 .focus-blue:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 30%,transparent)}
 .selection-blue ::selection,.selection-blue::selection{background:color-mix(in srgb,var(--blue) 30%,transparent)!important;color:inherit!important}
+
+/* ==========================================================
+   v10 — КОМПАКТНИЙ UI (мобільний first)
+   Типорозмір «як у системних застосунках»: шапка 44px, поле
+   пошуку 40px, фільтри 32px, щільні картки, нижній таб-бар —
+   вузька капсула по центру. Матеріал скла став щільнішим,
+   щоб контент не просвічував крізь меню.
+   ========================================================== */
+html:not(.dark){--glass:rgba(255,255,255,.88)}
+.dark{--glass:rgba(28,28,30,.88)}
+header,header.safe-top{padding-top:calc(6px + env(safe-area-inset-top,0px))!important;padding-bottom:6px!important}
+header h1{font-size:15px!important;line-height:1.2!important;font-weight:700!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;letter-spacing:-.02em!important}
+header .h-9{height:32px!important}header .w-9{width:32px!important}
+header .from-blue-brand{border-radius:9px!important}header .from-blue-brand svg{width:18px;height:18px}
+header button{min-height:0}#adminToggleBtn{padding:0 9px!important}
+main,main.p-4{padding:8px 12px calc(78px + env(safe-area-inset-bottom,0px))!important}
+main>*+*{margin-top:8px!important}
+#searchInput{height:40px;padding-top:0!important;padding-bottom:0!important;border-radius:12px!important;font-size:16px!important}
+.chip-btn{min-height:32px!important;padding:0 12px!important;font-size:13px!important;line-height:1!important;display:inline-flex;align-items:center;gap:5px}
+.chip-btn svg{width:14px;height:14px}
+.chip-btn span{font-size:inherit}
+#shipmentsContainer{gap:10px!important;padding-top:0!important}
+
+/* Картка: щільна */
+.shipment-card,.dark .shipment-card{padding:14px!important;border-radius:20px!important;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--gold) 11%,var(--surface)) 0%,var(--surface) 40%)!important}
+.shipment-card.card-hot{background:linear-gradient(180deg,color-mix(in srgb,var(--rose) 16%,var(--surface)) 0%,var(--surface) 44%)!important}
+.shipment-card.card-confirmed{background:var(--surface)!important}
+.shipment-card>*+*{margin-top:10px!important}
+.shipment-card .text-\[15px\]{font-size:17px!important;line-height:1.2!important;font-weight:700!important;letter-spacing:-.02em!important}
+.shipment-card .text-\[11px\],.shipment-card .text-\[10px\]{font-size:10.5px!important}
+.shipment-card button.w-9{width:30px!important;height:30px!important;border-radius:10px!important}
+.shipment-card .inner-cell{padding:8px 10px!important}
+.badge-hot,.badge-searching,.badge-confirmed{padding:3px 9px!important;font-size:11px!important}
+.route-preview{height:104px!important;border-radius:12px}
+.route-label{display:none!important}
+.route-distance{transform:scale(.9);transform-origin:left bottom}
+.route-info{padding:6px 10px!important}
+.ticket-foot .btn-gradient-apple{padding-top:11px;padding-bottom:11px;font-size:14px;border-radius:12px}
+
+/* Таб-бар: вузька капсула */
+nav.fixed,nav.fixed.safe-bottom{left:50%!important;right:auto!important;width:min(calc(100% - 40px),320px);transform:translateX(-50%);bottom:calc(8px + env(safe-area-inset-bottom,0px))!important;padding:6px 8px!important;border-radius:26px;background:var(--glass)!important}
+nav.fixed button{gap:1px!important}
+nav.fixed svg{width:20px;height:20px}
+nav.fixed .text-\[10px\]{font-size:10px!important;font-weight:600}
+nav .bg-blue-soft{width:36px!important;height:24px!important;border-radius:12px!important}
+nav .btn-gradient-apple{width:44px!important;height:44px!important;margin-top:-20px!important;border:3px solid var(--bg)!important;box-shadow:0 4px 12px -2px color-mix(in srgb,var(--blue) 60%,transparent)!important}
+nav .btn-gradient-apple svg{width:22px;height:22px}
